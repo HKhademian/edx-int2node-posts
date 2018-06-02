@@ -17,7 +17,6 @@ route.post('/', (req, res) => {
 	let comments = req.param.post.comments
 	let id = comments.length
 	let comment = {
-		id: id,
 		email: req.body.email,
 		text: req.body.text,
 	}

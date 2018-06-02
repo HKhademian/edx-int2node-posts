@@ -1,10 +1,10 @@
 const express = require('express')
 const route = module.exports = express.Router()
-
-const posts = []
+const posts = require('../lib/store').posts
 
 route.use('/:postId/comments', (req, res, next) => {
 	let id = req.params.postId
+	if(!posts[id]) return res.sendStatus(404)
 	req.param.post = posts[id]
 	console.log(req.param.post)
 	return next()
@@ -24,9 +24,9 @@ route.get('/:postId', (req, res) => {
 route.post('/', (req, res) => {
 	let id = posts.length
 	let post = {
-		id: id,
-		title: req.body.title,
+		name: req.body.name,
 		writer: req.body.writer,
+		url: req.body.url,
 		text: req.body.text,
 		comments: [],
 	}
@@ -38,8 +38,9 @@ route.put('/:postId', (req, res) => {
 	let id = req.params.postId
 	if(!posts[id]) return res.sendStatus(404)
 		Object.assign(posts[id], {
-		title: req.body.title,
+		name: req.body.name,
 		writer: req.body.writer,
+		url: req.body.url,
 		text: req.body.text,
 	})
 	return res.status(201).send({id: id})
